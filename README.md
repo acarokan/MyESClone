@@ -1,4 +1,5 @@
 # MyESClone
-Express Scribe Like Program with PySide6
+
+Express scribe-like program made with PySide6
 
 ffmpeg is required
