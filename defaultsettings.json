@@ -1,0 +1,17 @@
+{
+  "theme": "dark_blue.xml",
+  "rewind_count": 1000,
+  "oto_rewind_count": 1000,
+  "playing_object": null,
+  "playing_list": null,
+  "player_after_type": false,
+  "global_stop": false,
+  "durdurma_duzelt": 0,
+  "oto_stop_toggle_bool": true,
+  "timer_rewind_interval": 10,
+  "volume_step": 1,
+  "speed_step": 1,
+  "forward_count": 3,
+  "oto_play_time": 1000,
+  "volume_step_with_keyboard": 10
+}

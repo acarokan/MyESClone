@@ -1,0 +1,5 @@
+.ColorLine {{
+  color: {QTMATERIAL_PRIMARYCOLOR};
+  text-transform: none;
+  background-color: {QTMATERIAL_SECONDARYCOLOR};
+}}

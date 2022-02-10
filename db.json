@@ -1,0 +1,26 @@
+{
+    "0": {
+        "play_list": null,
+        "parent_str": "",
+        "position": 1450,
+        "file_dir": "sounds\\okan.wav",
+        "extension": "wav",
+        "filename": "okan",
+        "duration": "00:00:06.799",
+        "performer": null,
+        "last_modification_date": "2022-02-10",
+        "last_modification_time": "13:32:28.297"
+    },
+    "1": {
+        "play_list": null,
+        "parent_str": "",
+        "position": 23711,
+        "file_dir": "sounds\\AL\u0130.wav",
+        "extension": "wav",
+        "filename": "AL\u0130",
+        "duration": "00:00:25.157",
+        "performer": null,
+        "last_modification_date": "2022-02-10",
+        "last_modification_time": "13:32:26.908"
+    }
+}
