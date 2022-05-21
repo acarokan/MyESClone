@@ -1,0 +1,8 @@
+__pycache__/
+sounds/
+build/
+dist/
+ffmpeg.exe
+ffplay.exe
+ffprobe.exe
+main.spec

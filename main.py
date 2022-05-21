@@ -1,10 +1,12 @@
+from asyncore import write
 import threading
 import itertools
 import vlc
 import os
 import shutil
+import json
 from pathlib import Path
-from PySide6.QtCore import QTimer, QSettings
+from PySide6.QtCore import QTimer, QSettings, QModelIndex
 from PySide6 import QtCore
 from PySide6.QtWidgets import QMainWindow, QApplication, QFileDialog, QDialog
 from template import Ui_MainWindow
@@ -73,6 +75,7 @@ class Main(QMainWindow):
         self.media_player_event_attach()
         self.set_setting_theme_list()
         self.set_settings_before_run()
+        self.set_media_before_running()
         self.set_keyboard_listener()
 
     def set_application_other_object(self):
@@ -161,6 +164,22 @@ class Main(QMainWindow):
         self.volume_step_with_keyboard = External.get_from_settings_or_defaults("volume_step_with_keyboard")
         #self.hotkeyup = keyboard.HotKey(keyboard.HotKey.parse('<ctrl>++'), self.volume_up_with_key)
         #self.hotkeydown = keyboard.HotKey(keyboard.HotKey.parse('<ctrl>+-'), self.volume_down_with_key)
+
+    def set_media_before_running(self):
+        with open("last_sound.json", encoding="UTF-8") as f:
+            db = json.load(f)
+        media = db["last_sound"]
+        if len(media) > 1:
+            top_item_num = media[0]
+            child_item_num = media[-1]
+            topitem = self.ui.treeWidget.topLevelItem(top_item_num)
+            childitem = topitem.child(child_item_num)
+            self.ui.treeWidget.setCurrentItem(childitem)
+        else:
+            topitem = self.ui.treeWidget.topLevelItem(media[0])
+            self.ui.treeWidget.setCurrentItem(topitem)
+
+        
 
     def set_settings_before_run(self):
         """
@@ -550,6 +569,7 @@ class Main(QMainWindow):
                     os.rmdir(file)
                 except:
                     pass
+        self.write_db_before_close()
 
     def add_audios(self, file, name=None):
         cti = CustomListItem()
@@ -580,8 +600,10 @@ class Main(QMainWindow):
         file = self.external.copy_file_in_sounds_dir(file, name, self.progress_bar.ui.progressBar)
         self.progress_bar.exec()
         self.external.convert_thread.join()
+        
         file_is_dir = os.path.isdir(file)
         self.add_audios(file, name) if file_is_dir else self.add_audio(file, name)
+        self.write_db_before_close()
 
     def add_file_with_button(self):
         file_dialog = QFileDialog()
@@ -661,9 +683,32 @@ class Main(QMainWindow):
         setting.setValue("oto_play_time", self.oto_play_time)
         setting.setValue("volume_step_with_keyboard", self.volume_step_with_keyboard)
 
+    def get_last_play_sound(self):
+
+        data = []
+        top_num = -1
+        child_num = -1
+        last_play = self.ui.treeWidget.currentItem()
+        last_play_parent = last_play.parent()
+        if last_play_parent:
+            top_num = self.ui.treeWidget.indexOfTopLevelItem(last_play_parent)
+            child_num = last_play_parent.indexOfChild(last_play)
+            data = [top_num, child_num]
+        else:
+            top_num = self.ui.treeWidget.indexOfTopLevelItem(last_play)
+            data = [top_num]
+
+        data = {
+            "last_sound": data
+        }
+        with open("last_sound.json","w", encoding="UTF-8") as f:
+            json.dump(data,f,indent=4)
+            
+
     def closeEvent(self, arg):
         self.write_db_before_close()
         self.save_settings_before_close()
+        self.get_last_play_sound()
 
 
 if __name__ == '__main__':
